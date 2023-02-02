@@ -1,9 +1,30 @@
 import { useBroadcastChannel } from '@/hooks/useBroadcastChannel'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react'
 
 export default function BroadcastPage() {
+  // const broadcast = useBroadcastChannel('iframe-connection')
+
+  // const handleRedirect = ({
+  //   data
+  // }: MessageEvent<{ type: string; payload: Record<string, string> }>) => {
+  //   if (data.type !== 'redirect') return
+
+  //   router.push(data.payload.route)
+  // }
+
+  // useEffect(() => {
+  //   if (!broadcast) return
+
+  //   broadcast.addEventListener('message', handleRedirect)
+
+  //   return () => {
+  //     broadcast.removeEventListener('message', handleRedirect)
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [broadcast])
+
   return (
     <>
       <Head>

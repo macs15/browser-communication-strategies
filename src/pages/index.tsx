@@ -14,9 +14,6 @@ const HomePage: NextPage = ({}) => {
           <Link href='/examples/post-message'>postMessage</Link>
         </li>
         <li>
-          <Link href='/examples/socket'>WebSocket</Link>
-        </li>
-        <li>
           <Link href='/examples/messaging'>Message channel API</Link>
         </li>
       </ul>
