@@ -30,6 +30,8 @@ const MessagingPage = () => {
     iframe.addEventListener('load', onLoad)
 
     return () => {
+      channel.port1.close()
+      channel.port2.close()
       iframe.removeEventListener('load', onLoad)
     }
   }, [])

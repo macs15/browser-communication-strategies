@@ -136,3 +136,40 @@ li {
   width: 1px;
   background-color: white;
 }
+
+form.form {
+  margin-top: 32px;
+  border-radius: 8px;
+  border: 1px solid white;
+  padding: 32px;
+  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  color: black;
+  text-align: center;
+}
+
+.form input{
+  line-height: 24px;
+  padding: 0 8px;
+  background-color: white;
+}
+button {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+}
+
+.social-button {
+  background-color: rgb(94, 191, 94);
+}
+
+.oauth-btn {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background-color: rgb(74, 74, 232);
+}
