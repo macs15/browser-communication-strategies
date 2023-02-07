@@ -6,7 +6,7 @@ const OAuthPage = () => {
       name: 'Maykell Carrillo',
       email: 'maykell@testing.com'
     }
-    postMessage(data)
+    postMessage({ type: 'oauth', data })
     window.close()
   }
 

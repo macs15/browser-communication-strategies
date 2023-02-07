@@ -8,13 +8,13 @@ const HomePage: NextPage = ({}) => {
       <span className='horizontal-separator' />
       <ul>
         <li>
-          <Link href='/examples/broadcast'>Broadcast channel API</Link>
-        </li>
-        <li>
           <Link href='/examples/post-message'>postMessage</Link>
         </li>
         <li>
           <Link href='/examples/messaging'>Message channel API</Link>
+        </li>
+        <li>
+          <Link href='/examples/broadcast'>Broadcast channel API</Link>
         </li>
       </ul>
     </main>

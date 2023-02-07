@@ -1,29 +1,77 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useBroadcastChannel } from '@/hooks/useBroadcastChannel'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { MutableRefObject, useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
+
+type MessageEventTypes =
+  | { type: 'logout' }
+  | { type: 'login' }
+  | { type: 'update-counter'; payload: number }
 
 export default function BroadcastPage() {
-  // const broadcast = useBroadcastChannel('iframe-connection')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [count, setCount] = useState(0)
+  const broadcast = useBroadcastChannel('iframe-connection')
 
-  // const handleRedirect = ({
-  //   data
-  // }: MessageEvent<{ type: string; payload: Record<string, string> }>) => {
-  //   if (data.type !== 'redirect') return
+  useEffect(() => {
+    const token = Cookies.get('temp-token')
+    token && setIsAuthenticated(true)
+  }, [])
 
-  //   router.push(data.payload.route)
-  // }
+  const login = () => {
+    setIsAuthenticated(true)
+    Cookies.set('temp-token', 'abc-123')
+  }
 
-  // useEffect(() => {
-  //   if (!broadcast) return
+  const logout = () => {
+    setIsAuthenticated(false)
+    Cookies.remove('temp-token')
+  }
 
-  //   broadcast.addEventListener('message', handleRedirect)
+  const handleAuth = () => {
+    if (isAuthenticated) {
+      logout()
+      broadcast?.postMessage({ type: 'logout' })
+      return
+    }
 
-  //   return () => {
-  //     broadcast.removeEventListener('message', handleRedirect)
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [broadcast])
+    login()
+    broadcast?.postMessage({ type: 'login' })
+  }
+
+  const handleEvent = ({ data }: MessageEvent<MessageEventTypes>) => {
+    const { type } = data
+
+    if (type === 'logout') {
+      logout()
+    }
+
+    if (type === 'login') {
+      login()
+    }
+
+    if (type === 'update-counter') {
+      setCount(prevVal => prevVal + data.payload)
+    }
+
+    console.log('dispatched', type)
+  }
+
+  useEffect(() => {
+    if (!broadcast) return
+
+    broadcast.addEventListener('message', handleEvent)
+
+    return () => {
+      broadcast.removeEventListener('message', handleEvent)
+    }
+  }, [broadcast])
+
+  const updateCount = (value: number) => {
+    broadcast?.postMessage({ type: 'update-counter', payload: value })
+    setCount(prev => prev + value)
+  }
 
   return (
     <>
@@ -32,8 +80,29 @@ export default function BroadcastPage() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main>
-        <h1>Broadcast Channel API</h1>
+
+      <main className='broadcast'>
+        <h1>Broadcast Channel API example</h1>
+        <div className='box-horizontal'>
+          <p>Logged: {JSON.stringify(isAuthenticated)}</p>
+          <button type='button' onClick={handleAuth}>
+            {isAuthenticated ? 'Logout' : 'Login'}
+          </button>
+        </div>
+        <hr />
+        {isAuthenticated ? (
+          <>
+            <h3>
+              Current count: <b>{count}</b>
+            </h3>
+            <div className='box-horizontal'>
+              <button onClick={() => updateCount(1)}>Increment</button>
+              <button onClick={() => updateCount(-1)}>Decrement</button>
+            </div>
+          </>
+        ) : (
+          <h3>First log in to access</h3>
+        )}
       </main>
     </>
   )

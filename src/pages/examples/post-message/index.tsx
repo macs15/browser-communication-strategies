@@ -1,17 +1,18 @@
-import { FormEvent, useEffect } from 'react'
+import { FormEvent, useEffect, useRef } from 'react'
 
 const PostMessagePage = () => {
-  useEffect(() => {
-    if (typeof window === 'undefined') return
+  const tabRef = useRef<Window | null>(null)
 
-    window.postMessage('hello world', '*')
-  }, [])
+  const handleMessage = (e: MessageEvent) => {
+    if (e.data.type !== 'oauth') return
+
+    console.log(e.data)
+    tabRef.current?.removeEventListener('message', handleMessage)
+  }
 
   const onOAuthClick = () => {
-    const tab = window.open(`${window.origin}/examples/post-message/oauth`)
-    tab?.addEventListener('message', e => {
-      console.log(e.data)
-    })
+    tabRef.current = window.open(`${window.origin}/examples/post-message/oauth`)
+    tabRef.current?.addEventListener('message', handleMessage)
   }
 
   // ignore

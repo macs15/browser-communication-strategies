@@ -111,6 +111,13 @@ hr {
   margin: 24px 0;
 }
 
+h1,h2 {
+  margin-bottom: 16px;
+}
+h3,h4 {
+  margin-bottom: 8px;
+}
+
 main {
   padding: 24px;
   display: flex;
@@ -118,6 +125,10 @@ main {
   align-items: center;
   flex-direction: column;
   height: 100vh;
+}
+
+main.broadcast {
+justify-content: unset;
 }
 
 main.home {
@@ -172,4 +183,10 @@ button {
   flex-direction: column;
   padding: 8px;
   background-color: rgb(74, 74, 232);
+}
+
+.box-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
