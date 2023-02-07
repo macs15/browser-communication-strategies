@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useEffect, useRef, useState } from 'react'
 
 const iframeSrc = 'http://localhost:5173/iframe'
+const channel = new MessageChannel()
 
 const MessagingPage = () => {
   const [count, setCount] = useState(0)
@@ -10,7 +11,6 @@ const MessagingPage = () => {
   useEffect(() => {
     if (!iframeRef.current) return
 
-    const channel = new MessageChannel()
     const { current: iframe } = iframeRef
 
     const onLoad = () => {
@@ -30,11 +30,13 @@ const MessagingPage = () => {
     iframe.addEventListener('load', onLoad)
 
     return () => {
-      channel.port1.close()
-      channel.port2.close()
       iframe.removeEventListener('load', onLoad)
     }
   }, [])
+
+  const handleDispatch = () => {
+    channel.port1.postMessage({ type: 'increment' })
+  }
 
   return (
     <>
@@ -49,6 +51,7 @@ const MessagingPage = () => {
         <h2>
           Dispatched from iframe: <b>{count}</b>
         </h2>
+        <button onClick={handleDispatch}>Dispatch to iframe app</button>
         <br />
 
         <iframe ref={iframeRef} src={iframeSrc} width='100%' height='100%' />
